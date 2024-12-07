@@ -1,0 +1,34 @@
+@media (max-width: 768px) {
+  .card {
+    width: 90%; /* Reduce el tamaño de la tarjeta */
+    height: auto; /* Permite que la altura se ajuste automáticamente */
+    margin: 20px auto; /* Reduce el margen */
+    border: 10px solid var(--border-color); /* Reduce el borde */
+  }
+
+  .card p {
+    font-size: 1.2em; /* Reduce el tamaño del texto */
+    line-height: 1.5; /* Ajusta el interlineado */
+    padding: 10px; /* Reduce el padding */
+  }
+
+  .age-number {
+    font-size: 5em; /* Reduce el tamaño de los números */
+  }
+
+  .birthday-text {
+    font-size: 2em; /* Reduce el tamaño del texto */
+    margin-top: 10px;
+  }
+
+  .details {
+    flex-direction: column; /* Cambia a una columna para mejor adaptación */
+    align-items: center;
+    text-align: center;
+  }
+
+  .map-link {
+    margin-top: 20px; /* Ajusta el margen */
+    margin-left: 0; /* Centra el enlace */
+  }
+}
