@@ -3,7 +3,7 @@ name: Build and Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # O la rama que estés utilizando
+      - main
 
   # Permite ejecutar este flujo de trabajo manualmente desde la pestaña de Actions
   workflow_dispatch:
@@ -19,10 +19,9 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Se especifica la versión de Ubuntu para evitar la advertencia
 
     steps:
-    # Verifica el código del repositorio
     - name: Checkout repository
       uses: actions/checkout@v4
 
@@ -30,7 +29,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'  # Ajusta la versión a la que uses
+        node-version: '16'
 
     # Instala las dependencias del proyecto
     - name: Install dependencies
@@ -44,16 +43,14 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: ./dist  # Asegúrate de que este sea el directorio correcto donde se genera el build
+        path: ./dist
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: build
     steps:
-      # Despliega los archivos a GitHub Pages
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
         with:
-          branch: gh-pages  # La rama donde se subirá el contenido
-          folder: ./dist     # El directorio con los archivos de build
-
+          branch: gh-pages
+          folder: ./dist
