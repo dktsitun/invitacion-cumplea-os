@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-
-  # Permite ejecutar este flujo de trabajo manualmente desde la pestaña de Actions
   workflow_dispatch:
 
 permissions:
@@ -25,25 +23,21 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # Configura Node.js
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '16'
 
-    # Instala las dependencias del proyecto
     - name: Install dependencies
-      run: npm install
+      run: npm install  # Instalar las dependencias de npm
 
-    # Ejecuta el comando de build con npm (esto es específico para Parcel)
     - name: Build the project
-      run: npm run build
+      run: npm run build  # Construir el proyecto con Parcel
 
-    # Subir los archivos generados en el directorio de salida (ajusta según lo que necesites)
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: ./dist
+        path: ./dist  # Directorio donde Parcel genera los archivos
 
   deploy:
     runs-on: ubuntu-22.04
@@ -52,5 +46,5 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
         with:
-          branch: gh-pages
-          folder: ./dist
+          branch: gh-pages  # Subir a la rama gh-pages
+          folder: ./dist  # Carpeta de salida de Parcel
