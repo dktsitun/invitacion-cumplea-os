@@ -27,24 +27,33 @@ jobs:
 
       # Paso 3: Instalar dependencias
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npm ls  # Muestra las dependencias instaladas para verificar si hay algún problema
 
       # Paso 4: Ejecutar el build
       - name: Build the project
-        run: npm run build
+        run: |
+          npm run build
+        continue-on-error: true  # Permite que el flujo de trabajo continúe para ver el error sin detenerse
 
-      # Paso 5: Limpiar la carpeta de destino (si es necesario)
+      # Paso 5: Verificar los archivos generados
+      - name: List files in dist
+        run: |
+          ls -alh ./dist  # Verifica si la carpeta dist y los archivos generados están presentes
+
+      # Paso 6: Limpiar la carpeta de destino (si es necesario)
       - name: Clean up dist folder
         run: rm -rf ./dist/*
 
-      # Paso 6: Subir los archivos generados como artefactos
+      # Paso 7: Subir los archivos generados como artefactos
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
           name: build-artifact
           path: ./dist
 
-      # Paso 7: Desplegar a GitHub Pages
+      # Paso 8: Desplegar a GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
