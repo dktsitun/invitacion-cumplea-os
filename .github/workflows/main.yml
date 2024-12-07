@@ -1,4 +1,4 @@
-name: Build and Deploy to GitHub Pages
+name: Build and Deploy with Parcel
 
 on:
   push:
@@ -9,42 +9,45 @@ on:
 permissions:
   contents: read
   pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 jobs:
   build:
-    runs-on: ubuntu-22.04  # Se especifica la versión de Ubuntu para evitar la advertencia
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      # Paso 1: Verificar el código fuente
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
-
-    - name: Install dependencies
-      run: npm install  # Instalar las dependencias de npm
-
-    - name: Build the project
-      run: npm run build  # Construir el proyecto con Parcel
-
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: ./dist  # Directorio donde Parcel genera los archivos
-
-  deploy:
-    runs-on: ubuntu-22.04
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+      # Paso 2: Configurar Node.js
+        - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          branch: gh-pages  # Subir a la rama gh-pages
-          folder: ./dist  # Carpeta de salida de Parcel
+          node-version: '16'  # Asegúrate de usar la versión de Node.js que necesitas
+
+      # Paso 3: Instalar dependencias
+      - name: Install dependencies
+        run: npm install
+
+      # Paso 4: Ejecutar el build
+      - name: Build the project
+        run: npm run build
+
+      # Paso 5: Limpiar la carpeta de destino (si es necesario)
+      - name: Clean up dist folder
+        run: rm -rf ./dist/*
+
+      # Paso 6: Subir los archivos generados como artefactos
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: ./dist
+
+      # Paso 7: Desplegar a GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          branch: gh-pages
+          folder: ./dist
+
